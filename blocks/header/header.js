@@ -116,13 +116,23 @@ export default async function decorate(block) {
 
   const navSections = nav.querySelector('.nav-sections');
   if (navSections) {
+    const cleanUp = () => {
+      toggleAllNavSections(navSections);
+      document.removeEventListener('click', cleanUp);
+    };
     navSections.querySelectorAll(':scope .default-content-wrapper > ul > li').forEach((navSection) => {
       if (navSection.querySelector('ul')) navSection.classList.add('nav-drop');
-      navSection.addEventListener('click', () => {
+      navSection.addEventListener('click', (e) => {
         if (isDesktop.matches) {
           const expanded = navSection.getAttribute('aria-expanded') === 'true';
           toggleAllNavSections(navSections);
           navSection.setAttribute('aria-expanded', expanded ? 'false' : 'true');
+          if (expanded) {
+            document.removeEventListener('click', cleanUp);
+          } else {
+            document.addEventListener('click', cleanUp);
+            e.stopPropagation();
+          }
         }
       });
     });
