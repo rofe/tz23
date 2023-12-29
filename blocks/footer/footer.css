@@ -1,7 +1,10 @@
 footer {
-  padding: 2rem;
-  background-color: var(--light-color);
+  box-sizing: border-box;
+  padding: 1rem;
+  font-family: var(--heading-font-family);
   font-size: var(--body-font-size-s);
+  border-bottom: solid 5px var(--yellow);
+  background-color: var(--green);
 }
 
 footer .footer {

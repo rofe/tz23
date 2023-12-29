@@ -1,9 +1,9 @@
 @font-face {
-  font-family: changa;
+  font-family: changaregular;
   font-style: normal;
-  font-weight: 700;
+  font-weight: bolder;
   font-display: swap;
-  src: url('../fonts/Changa-VariableFont_wght.ttf') format('ttf');
+  src: url('../fonts/changa-variablefont_wght-webfont.woff2') format('woff2');
 }
 
 @font-face {
