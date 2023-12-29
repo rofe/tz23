@@ -1,4 +1,12 @@
 @font-face {
+  font-family: changa;
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../fonts/Changa-VariableFont_wght.ttf') format('ttf');
+}
+
+@font-face {
   font-family: roboto;
   font-style: normal;
   font-weight: 700;
