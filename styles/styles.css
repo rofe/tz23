@@ -99,7 +99,6 @@ h4, h5, h6 {
 
 h1 {
   font-size: var(--heading-font-size-xxl);
-  color: var(--yellow);
 }
 
 h2 {
