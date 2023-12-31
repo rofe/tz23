@@ -26,6 +26,10 @@ main .toc-back-to-top {
   margin-right: 16px;
   float: right;
   font-size: smaller;
+  position: absolute;
+  padding-left: 16px;
+  top: 4px;
+  right: 0;
 }
 
 @media (width >= 600px) {
