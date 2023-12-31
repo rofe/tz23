@@ -103,24 +103,27 @@ h1 {
 
 h2 {
   font-size: var(--heading-font-size-xl);
-  color: var(--blue);
+  color: var(--green);
 }
 
 h2::after {
   content: "❀";
   position: absolute;
-  margin-top: 12px;
+  color: var(--yellow);
+  margin-top: 20px;
   margin-left: 12px;
   transform: rotate(20deg);
+  font-size: smaller;
 }
 
 h3 {
   font-size: var(--heading-font-size-l);
-  color: var(--green);
+  color: var(--blue);
 }
 
 h4 {
   font-size: var(--heading-font-size-m);
+  color: gray;
 }
 
 h5 { font-size: var(--heading-font-size-s) }
