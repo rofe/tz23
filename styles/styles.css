@@ -106,6 +106,14 @@ h2 {
   color: var(--blue);
 }
 
+h2::after {
+  content: "❀";
+  position: absolute;
+  margin-top: 12px;
+  margin-left: 12px;
+  transform: rotate(20deg);
+}
+
 h3 {
   font-size: var(--heading-font-size-l);
   color: var(--green);
