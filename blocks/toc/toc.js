@@ -7,7 +7,7 @@ export default function decorate(block) {
       const title = heading.textContent;
       jumpLink.textContent = title;
       jumpLink.title = title;
-      jumpLink.href = `#${title.toLocaleLowerCase().replaceAll(' ', '-')}`;
+      jumpLink.href = `#${heading.id}`;
       li.append(jumpLink);
       ul.append(li);
 
