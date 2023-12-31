@@ -110,8 +110,8 @@ h2::after {
   content: "❀";
   position: absolute;
   color: var(--yellow);
-  margin-top: 20px;
-  margin-left: 12px;
+  margin-top: 18px;
+  margin-left: -7px;
   transform: rotate(20deg);
   font-size: smaller;
 }
