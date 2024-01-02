@@ -1,5 +1,3 @@
-let touchstart;
-
 function createButton(title, cls, click = () => {}) {
   const icon = document.createElement('i');
   const btn = document.createElement('button');
@@ -32,10 +30,6 @@ function navHandler(carousel, index) {
   carousel.start();
 }
 
-function mouseMoved(carousel) {
-  carousel.lastMouseMove = Date.now();
-}
-
 function stopMouseTracker(carousel) {
   carousel.root.classList.remove('carousel-show-controls');
   clearInterval(carousel.mouseTracker);
@@ -56,15 +50,14 @@ class Carousel {
   constructor(slides) {
     this.slides = slides;
     this.isFullScreen = false;
-
     this.root = document.createElement('div');
     this.root.classList.add('carousel');
-    this.createDeck();
-    this.createNav();
-    this.createControls();
   }
 
   init(block) {
+    this.createDeck();
+    this.createNav();
+    this.createControls();
     this.showSlide(0);
     this.start();
     block.append(this.root);
@@ -136,30 +129,29 @@ class Carousel {
     // fuillscreen toggle button
     const title = (fullscreen) => `${fullscreen ? 'Exit' : 'Enter'} Full Screen Mode`;
     const fsToggle = createButton(title(false), 'carousel-fullscreen-toggle', () => {
-      const enterFullScreen = !this.root.classList.contains('fullscreen');
       this.root.classList.toggle('fullscreen');
-      if (enterFullScreen) {
+      if (!this.isFullScreen) {
         this.isFullScreen = true;
         this.stop();
       } else {
         this.isFullScreen = false;
         this.start();
       }
-      fsToggle.title = title(enterFullScreen);
+      fsToggle.title = title(this.isFullScreen);
     });
     this.root.append(fsToggle);
 
     // detect horizontal swiping
     const handleSwipe = (touchend = 0) => {
-      if (touchend < touchstart) {
+      if (touchend < this.touchstart) {
         nextHandler(this);
-      } else if (touchend > touchstart) {
+      } else if (touchend > this.touchstart) {
         prevHandler(this);
       }
-      touchstart = 0;
+      this.touchstart = 0;
     };
     this.root.addEventListener('touchstart', ({ changedTouches }) => {
-      touchstart = changedTouches[0].screenX;
+      this.touchstart = changedTouches[0].screenX;
     }, { passive: true });
     this.root.addEventListener('touchend', ({ changedTouches }) => {
       handleSwipe(changedTouches[0].screenX);
@@ -176,18 +168,20 @@ class Carousel {
           fsToggle.click();
         }
       }
-    });
+    }, { passive: true });
 
     // show controls when mouse is in range and hide when idle for 5s
     this.root.addEventListener('mouseleave', () => {
-      stopMouseTracker(this);
-    });
+      if (this.mouseTracker) {
+        stopMouseTracker(this);
+      }
+    }, { passive: true });
     this.root.addEventListener('mousemove', () => {
-      mouseMoved(this);
+      this.lastMouseMove = Date.now();
       if (!this.mouseTracker) {
         startMouseTracker(this, 3000);
       }
-    });
+    }, { passive: true });
   }
 }
 
