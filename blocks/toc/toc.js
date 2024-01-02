@@ -19,5 +19,6 @@ export default function decorate(block) {
       heading.append(topLink);
     }
   });
+  block.textContent = 'Inhalt:';
   block.append(ul);
 }

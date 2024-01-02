@@ -2,10 +2,14 @@ main .toc-wrapper {
   padding: 16px 16px 0;
 }
 
+main .toc {
+  font-size: var(--body-font-size-s);
+}
+
 main .toc ul {
   list-style: none;
   padding: 0;
-  font-size: var(--body-font-size-s);
+  margin-top: 0;
 }
 
 main .toc a::before {
@@ -54,9 +58,6 @@ main .toc-back-to-top {
     padding: 0;
     right: 48px;
     z-index: 1;
-  }
-
-  main .toc ul {
     font-size: var(--body-font-size-xs);
   }
 }
