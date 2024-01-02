@@ -3,6 +3,33 @@
   position: relative;
 }
 
+.carousel button {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  padding: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+  border: solid 2px rgba(255 255 255 / 30%);
+  background-color: rgba(0 0 0 / 35%);
+}
+
+.carousel button:hover {
+  background-color: rgba(0 0 0 / 75%);
+}
+
+.carousel button:active {
+  background-color: black;
+}
+
+.carousel button i {
+  width: 20px;
+  height: 20px;
+}
+
 .carousel .carousel-slide {
   display: none;
   font-size: 0;
@@ -52,23 +79,8 @@
 }
 
 .carousel .carousel-fullscreen-toggle {
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 10px;
-  padding: 0;
   top: 0;
   right: 0;
-  width: 48px;
-  height: 48px;
-  border-radius: 24px;
-  background-color: rgba(0 0 0 / 35%);
-}
-
-.carousel .carousel-fullscreen-toggle i {
-  width: 20px;
-  height: 20px;
 }
 
 .carousel .carousel-fullscreen-toggle i::before,
@@ -93,12 +105,58 @@
   top: 10px;
 }
 
+.carousel .carousel-previous,
+.carousel .carousel-next {
+  display: none;
+  top: 45%;
+  transform: translateY(-50%);
+}
+
 @media (width >= 600px) {
   .carousel .carousel-nav > .carousel-navlink {
     height: 16px;
     width: 16px;
     margin: 10px 0 0;
   }
+}
+
+@media (width >= 900px) {
+  .carousel button {
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
+  }
+
+  .carousel.carousel-show-controls button {
+    opacity: 1;
+  }
+
+  .carousel .carousel-previous {
+    display: block;
+    left: 10px;
+  }
+
+  .carousel .carousel-next {
+    display: block;
+    right: 10px;
+  }
+}
+
+.carousel .carousel-previous i,
+.carousel .carousel-next i {
+  position: relative;
+  display: block;
+  width: 10px;
+  height: 10px;
+  left: 17px;
+  border: solid 3px white;
+  border-top-color: transparent;
+  border-right-color: transparent;
+  transform: rotate(45deg);
+}
+
+.carousel .carousel-next i {
+  left: 10px;
+  transform: rotate(225deg);
 }
 
 /* fullscreeen mode */
@@ -111,7 +169,11 @@
   z-index: 100;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(0 0 0 / 90%);
+  background-color: black;
+}
+
+.carousel.fullscreen button {
+  margin: 20px;
 }
 
 .carousel.fullscreen .carousel-slide picture img {
@@ -122,11 +184,6 @@
 
 .carousel.fullscreen .carousel-nav {
   display: none;
-}
-
-.carousel.fullscreen .carousel-fullscreen-toggle {
-  margin: 20px;
-  background-color: rgba(255 255 255 / 15%);
 }
 
 .carousel.fullscreen .carousel-fullscreen-toggle i::before,

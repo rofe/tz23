@@ -1,8 +1,40 @@
 let touchstart = 0;
 
+function createButton(title, cls, click = () => {}) {
+  const icon = document.createElement('i');
+  const btn = document.createElement('button');
+  btn.title = title;
+  btn.classList.add(cls);
+  btn.addEventListener('click', click);
+  btn.append(icon);
+  return btn;
+}
+
+function prevHandler(carousel) {
+  carousel.prevSlide();
+  if (!carousel.root.classList.contains('fullscreen')) {
+    // (re)start carousel
+    carousel.start();
+  }
+}
+
+function nextHandler(carousel) {
+  carousel.nextSlide();
+  if (!carousel.root.classList.contains('fullscreen')) {
+    // (re)start carousel
+    carousel.start();
+  }
+}
+
+function navHandler(carousel, index) {
+  carousel.showSlide(index);
+  // (re) start carousel
+  carousel.start();
+}
 class Carousel {
   constructor(slides) {
     this.slides = slides;
+    this.isFullScreen = false;
 
     this.root = document.createElement('div');
     this.root.classList.add('carousel');
@@ -12,21 +44,18 @@ class Carousel {
   }
 
   init(block) {
-    this.navLinks = this.root.querySelectorAll('ol > li');
-    this.navLinks.forEach((li, i) => li.addEventListener('click', () => this.showSlide(i)));
-
-    block.append(this.root);
     this.showSlide(0);
     this.start();
-    this.detectSwipe();
-  }
-
-  start() {
-    this.interval = setInterval(() => this.nextSlide(), 7000);
+    block.append(this.root);
   }
 
   stop() {
     clearInterval(this.interval);
+  }
+
+  start() {
+    this.stop();
+    this.interval = setInterval(() => this.nextSlide(), 7000);
   }
 
   nextSlide() {
@@ -46,12 +75,12 @@ class Carousel {
   }
 
   showSlide(index) {
-    const prevSlide = this.currentSlide || 0;
+    const prevSlide = this.currentSlide;
     this.currentSlide = index;
-    this.slides[prevSlide].classList.remove('active');
-    this.slides[this.currentSlide].classList.toggle('active');
-    this.navLinks[prevSlide].classList.toggle('active');
-    this.navLinks[this.currentSlide].classList.toggle('active');
+    this.slides[prevSlide]?.classList.remove('active');
+    this.slides[this.currentSlide].classList.add('active');
+    this.navLinks[prevSlide]?.classList.remove('active');
+    this.navLinks[this.currentSlide].classList.add('active');
   }
 
   createDeck() {
@@ -60,6 +89,7 @@ class Carousel {
   }
 
   createNav() {
+    this.navLinks = [];
     const nav = document.createElement('ol');
     nav.classList.add('carousel-nav');
     this.slides.forEach((_, i) => {
@@ -68,47 +98,72 @@ class Carousel {
       if (i === 0) {
         li.classList.add('active');
       }
+      li.addEventListener('click', () => navHandler(this, i));
       nav.appendChild(li);
+      this.navLinks.push(li);
     });
     this.root.append(nav);
   }
 
   createControls() {
-    const getTitle = (fullscreen) => `${fullscreen ? 'Exit' : 'Enter'} Full Screen Mode`;
-    const icon = document.createElement('i');
-    const btn = document.createElement('button');
-    btn.title = getTitle(false);
-    btn.classList.add('carousel-fullscreen-toggle');
-    btn.addEventListener('click', () => {
+    // previous button
+    this.root.append(createButton('Previous Image', 'carousel-previous', () => prevHandler(this)));
+
+    // next button
+    this.root.append(createButton('Next Image', 'carousel-next', () => nextHandler(this)));
+
+    // fuillscreen toggle button
+    const title = (fullscreen) => `${fullscreen ? 'Exit' : 'Enter'} Full Screen Mode`;
+    const fsToggle = createButton(title(false), 'carousel-fullscreen-toggle', () => {
       const enterFullScreen = !this.root.classList.contains('fullscreen');
       this.root.classList.toggle('fullscreen');
       if (enterFullScreen) {
+        this.isFullScreen = true;
         this.stop();
       } else {
+        this.isFullScreen = false;
         this.start();
       }
-      btn.title = getTitle(enterFullScreen);
+      fsToggle.title = title(enterFullScreen);
     });
-    btn.append(icon);
-    this.root.append(btn);
-  }
+    this.root.append(fsToggle);
 
-  detectSwipe() {
+    // detect horizontal swiping
     const handleSwipe = (touchend = 0) => {
       if (touchend < touchstart) {
-        this.nextSlide();
+        nextHandler(this);
       } else if (touchend > touchstart) {
-        this.prevSlide();
+        prevHandler(this);
       }
       touchstart = 0;
     };
-
     this.root.addEventListener('touchstart', ({ changedTouches }) => {
       touchstart = changedTouches[0].screenX;
     }, { passive: true });
     this.root.addEventListener('touchend', ({ changedTouches }) => {
       handleSwipe(changedTouches[0].screenX);
     }, { passive: true });
+
+    // detect arrow and esc keys
+    document.addEventListener('keyup', ({ key }) => {
+      if (this.isFullScreen) {
+        if (key === 'ArrowLeft') {
+          prevHandler(this);
+        } else if (key === 'ArrowRight') {
+          nextHandler(this);
+        } else if (key === 'Escape') {
+          fsToggle.click();
+        }
+      }
+    });
+
+    // show controls when mouse is in range
+    this.root.addEventListener('mouseenter', () => {
+      this.root.classList.add('carousel-show-controls');
+    });
+    this.root.addEventListener('mouseleave', () => {
+      this.root.classList.remove('carousel-show-controls');
+    });
   }
 }
 
