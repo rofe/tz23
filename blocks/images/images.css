@@ -1,20 +1,24 @@
 .carousel {
-  margin: 0 auto;
+  margin: 2rem auto;
   position: relative;
 }
 
 .carousel .carousel-slide {
   display: none;
   font-size: 0;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
 }
 
 
 .carousel .carousel-slide.active {
-  display: block;
+  display: flex;
 }
 
 .carousel .carousel-slide picture img {
-  width: 100%;
+    width: 100%;
+    height: auto;
 }
 
 .carousel .carousel-nav {
@@ -41,10 +45,97 @@
   background-color: var(--blue);
 }
 
+.carousel .carousel-fullscreen-toggle {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 10px;
+  padding: 0;
+  top: 0;
+  right: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: 24px;
+}
+
+.carousel .carousel-fullscreen-toggle i {
+  width: 20px;
+  height: 20px;
+}
+
+.carousel .carousel-fullscreen-toggle i::before,
+.carousel .carousel-fullscreen-toggle i::after {
+  content: "";
+  position: absolute;
+  display: block;
+  width: 10px;
+  height: 10px;
+  left: 10px;
+  bottom: 10px;
+  border: solid 3px white;
+  border-top-color: transparent;
+  border-right-color: transparent;
+}
+
+.carousel .carousel-fullscreen-toggle i::after {
+  transform: rotate(180deg);
+  left: unset;
+  bottom: unset;
+  right: 10px;
+  top: 10px;
+}
+
 @media (width >= 600px) {
   .carousel .carousel-nav > .carousel-navlink {
     height: 16px;
     width: 16px;
     margin: 10px 0 0;
+  }
+}
+
+/* fullscreeen mode */
+
+.carousel.fullscreen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  margin: 0;
+  z-index: 100;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0 0 0 / 90%);
+}
+
+.carousel.fullscreen .carousel-slide picture img {
+  max-height: 100vh;
+  width: auto;
+  margin: 0 auto;
+}
+
+.carousel.fullscreen .carousel-nav {
+  display: none;
+}
+
+.carousel.fullscreen .carousel-fullscreen-toggle i::before,
+.carousel.fullscreen .carousel-fullscreen-toggle i::after {
+  left: unset;
+  bottom: unset;
+  top: 5px;
+  right: 5px;
+}
+
+.carousel.fullscreen .carousel-fullscreen-toggle i::after {
+  top: unset;
+  right: unset;
+  bottom: 5px;
+  left: 5px;
+}
+
+@media (width >= 900px) {
+  .carousel.fullscreen .carousel-slide picture img {
+    height: auto;
+    max-height: unset;
+    width: 100vw;
   }
 }

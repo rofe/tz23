@@ -1,3 +1,5 @@
+let touchstart = 0;
+
 class Carousel {
   constructor(slides) {
     this.slides = slides;
@@ -6,7 +8,7 @@ class Carousel {
     this.root.classList.add('carousel');
     this.createDeck();
     this.createNav();
-    this.currentSlideIndex = 0;
+    this.createControls();
   }
 
   init(block) {
@@ -14,37 +16,42 @@ class Carousel {
     this.navLinks.forEach((li, i) => li.addEventListener('click', () => this.showSlide(i)));
 
     block.append(this.root);
+    this.showSlide(0);
     this.start();
+    this.detectSwipe();
   }
 
   start() {
-    this.showSlide(0);
-    setInterval(() => this.nextSlide(), 7000);
+    this.interval = setInterval(() => this.nextSlide(), 7000);
+  }
+
+  stop() {
+    clearInterval(this.interval);
   }
 
   nextSlide() {
-    if (this.currentSlideIndex < this.slides.length - 1) {
-      this.showSlide(this.currentSlideIndex + 1);
+    if (this.currentSlide < this.slides.length - 1) {
+      this.showSlide(this.currentSlide + 1);
     } else {
       this.showSlide(0);
     }
   }
 
   prevSlide() {
-    if (this.currentSlideIndex > 0) {
-      this.showSlide(this.currentSlideIndex - 1);
+    if (this.currentSlide > 0) {
+      this.showSlide(this.currentSlide - 1);
     } else {
       this.showSlide(this.slides.length - 1);
     }
   }
 
   showSlide(index) {
-    const prevSlideIndex = this.currentSlideIndex;
-    this.currentSlideIndex = index;
-    this.slides[prevSlideIndex].classList.remove('active');
-    this.slides[this.currentSlideIndex].classList.toggle('active');
-    this.navLinks[prevSlideIndex].classList.toggle('active');
-    this.navLinks[this.currentSlideIndex].classList.toggle('active');
+    const prevSlide = this.currentSlide || 0;
+    this.currentSlide = index;
+    this.slides[prevSlide].classList.remove('active');
+    this.slides[this.currentSlide].classList.toggle('active');
+    this.navLinks[prevSlide].classList.toggle('active');
+    this.navLinks[this.currentSlide].classList.toggle('active');
   }
 
   createDeck() {
@@ -64,6 +71,44 @@ class Carousel {
       nav.appendChild(li);
     });
     this.root.append(nav);
+  }
+
+  createControls() {
+    const getTitle = (fullscreen) => `${fullscreen ? 'Exit' : 'Enter'} Full Screen Mode`;
+    const icon = document.createElement('i');
+    const btn = document.createElement('button');
+    btn.title = getTitle(false);
+    btn.classList.add('carousel-fullscreen-toggle');
+    btn.addEventListener('click', () => {
+      const enterFullScreen = !this.root.classList.contains('fullscreen');
+      this.root.classList.toggle('fullscreen');
+      if (enterFullScreen) {
+        this.stop();
+      } else {
+        this.start();
+      }
+      btn.title = getTitle(enterFullScreen);
+    });
+    btn.append(icon);
+    this.root.append(btn);
+  }
+
+  detectSwipe() {
+    const handleSwipe = (touchend = 0) => {
+      if (touchend < touchstart) {
+        this.nextSlide();
+      } else if (touchend > touchstart) {
+        this.prevSlide();
+      }
+      touchstart = 0;
+    };
+
+    this.root.addEventListener('touchstart', ({ changedTouches }) => {
+      touchstart = changedTouches[0].screenX;
+    }, { passive: true });
+    this.root.addEventListener('touchend', ({ changedTouches }) => {
+      handleSwipe(changedTouches[0].screenX);
+    }, { passive: true });
   }
 }
 
