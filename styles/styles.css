@@ -120,7 +120,7 @@ h2::after {
 
 h3 {
   font-size: var(--heading-font-size-l);
-  color: var(--blue);
+  color: var(--link-color);
 }
 
 h4 {

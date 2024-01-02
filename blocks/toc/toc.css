@@ -11,7 +11,7 @@ main .toc ul {
 main .toc a::before {
   display: inline-block;
   content: ">";
-  color: var(--blue);
+  color: var(--link-color);
   width: 20px;
 }
 
@@ -49,7 +49,14 @@ main .toc-back-to-top {
   }
 
   main .toc {
+    position: absolute;
     margin-top: 10px;
-    float: right;
+    padding: 0;
+    right: 48px;
+    z-index: 1;
+  }
+
+  main .toc ul {
+    font-size: var(--body-font-size-xs);
   }
 }

@@ -4,6 +4,7 @@ footer {
   font-family: var(--heading-font-family);
   font-size: var(--body-font-size-s);
   border-bottom: solid 5px var(--yellow);
+  color: white;
   background-color: var(--green);
 }
 
