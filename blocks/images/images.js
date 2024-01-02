@@ -1,4 +1,4 @@
-let touchstart = 0;
+let touchstart;
 
 function createButton(title, cls, click = () => {}) {
   const icon = document.createElement('i');
@@ -31,6 +31,27 @@ function navHandler(carousel, index) {
   // (re) start carousel
   carousel.start();
 }
+
+function mouseMoved(carousel) {
+  carousel.lastMouseMove = Date.now();
+}
+
+function stopMouseTracker(carousel) {
+  carousel.root.classList.remove('carousel-show-controls');
+  clearInterval(carousel.mouseTracker);
+  carousel.mouseTracker = undefined;
+}
+
+function startMouseTracker(carousel, timeout) {
+  carousel.root.classList.add('carousel-show-controls');
+  carousel.mouseTracker = setInterval(() => {
+    if (carousel.mouseTracker
+      && carousel.lastMouseMove && Date.now() > carousel.lastMouseMove + timeout) {
+      stopMouseTracker(carousel);
+    }
+  }, 1000);
+}
+
 class Carousel {
   constructor(slides) {
     this.slides = slides;
@@ -157,12 +178,15 @@ class Carousel {
       }
     });
 
-    // show controls when mouse is in range
-    this.root.addEventListener('mouseenter', () => {
-      this.root.classList.add('carousel-show-controls');
-    });
+    // show controls when mouse is in range and hide when idle for 5s
     this.root.addEventListener('mouseleave', () => {
-      this.root.classList.remove('carousel-show-controls');
+      stopMouseTracker(this);
+    });
+    this.root.addEventListener('mousemove', () => {
+      mouseMoved(this);
+      if (!this.mouseTracker) {
+        startMouseTracker(this, 3000);
+      }
     });
   }
 }
