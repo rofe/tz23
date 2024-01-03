@@ -206,8 +206,14 @@ a.button.secondary, button.secondary {
   color: var(--text-color)
 }
 
+main picture {
+  display: flex;
+  margin: 0 auto;
+  justify-content: center;
+}
+
 main img {
-  max-width: 100%;
+  max-width: 800px;
   width: auto;
   height: auto;
 }
