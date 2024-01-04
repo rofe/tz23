@@ -213,7 +213,7 @@ main picture {
 }
 
 main img {
-  max-width: 800px;
+  max-width: 100%;
   width: auto;
   height: auto;
 }
@@ -241,7 +241,11 @@ main .section {
 }
 
 @media (width >= 900px) {
-  .section > div {
+  main img {
+    max-width: 800px;
+  }
+
+  .section>div {
     max-width: 1200px;
     margin: auto;
   }
