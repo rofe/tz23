@@ -55,11 +55,8 @@ class Carousel {
     this.#createFullScreenMode();
     this.#manageControls();
     this.#detectUserInput();
-    this.showSlide(0);
+    this.#navHandler(0);
     elem.append(this.#root);
-    if (this.#cfg.autoplay) {
-      this.start();
-    }
   }
 
   stop() {

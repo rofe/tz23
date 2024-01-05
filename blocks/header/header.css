@@ -1,6 +1,6 @@
 /* header and nav layout */
 :root {
-  --nav-inner-height: calc(var(--nav-height) - 20px);
+  --nav-inner-height: calc(var(--nav-height) - 30px);
 }
 
 header {

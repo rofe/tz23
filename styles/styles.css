@@ -55,7 +55,7 @@
   --heading-font-size-xs: 18px;
 
   /* nav height */
-  --nav-height: 74px;
+  --nav-height: 84px;
 }
 
 @media (width >= 900px) {
