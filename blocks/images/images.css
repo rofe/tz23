@@ -13,6 +13,7 @@ main .images {
 .carousel {
   margin: 0;
   position: relative;
+  padding-top: 75%;
 }
 
 .carousel button {
@@ -43,16 +44,19 @@ main .images {
 }
 
 .carousel .carousel-slide {
-  display: none;
+  position: absolute;
+  display: flex;
   font-size: 0;
-  height: 100%;
+  top: 0;
   justify-content: center;
   align-items: center;
+  opacity: 0;
+  transition: opacity 0.5s ease-in;
 }
 
 
 .carousel .carousel-slide.active {
-  display: flex;
+  opacity: 1;
 }
 
 .carousel .carousel-slide picture {
@@ -175,12 +179,9 @@ main .images {
 
 .carousel.fullscreen {
   position: fixed;
-  top: 0;
-  left: 0;
+  inset: 0;
   margin: 0;
   z-index: 100;
-  width: 100vw;
-  height: 100vh;
   background-color: black;
 }
 
@@ -192,6 +193,11 @@ main .images {
   max-width: 100vw;
   height: auto;
   margin: 0 auto;
+}
+
+.carousel.fullscreen .carousel-slide {
+  width: 100vw;
+  height: 100vh;
 }
 
 .carousel.fullscreen .carousel-nav {
